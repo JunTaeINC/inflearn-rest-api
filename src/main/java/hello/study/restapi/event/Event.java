@@ -45,5 +45,5 @@ public class Event {
 	  단점 : ORDINAL에 비해 약간 더 많은 저장 공간을 차지하고, 문자열 비교가 숫자 비교보다는 느리다
 	 */
 	@Enumerated(EnumType.STRING)
-	private EventStatus eventStatus;
+	private EventStatus eventStatus = EventStatus.DRAFT;
 }

@@ -7,18 +7,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest
+@SpringBootTest
+@AutoConfigureMockMvc
 @ExtendWith(SpringExtension.class)
 public class EventControllerTest {
 
@@ -28,12 +29,10 @@ public class EventControllerTest {
 	@Autowired
 	ObjectMapper objectMapper;
 
-	@MockBean
-	EventRepository eventRepository;
-
 	@Test
 	void createEvent() throws Exception {
 		Event event = Event.builder()
+			.id(100)
 			.name("Kim's")
 			.description("HBD Party")
 			.beginEnrollmentDateTime(LocalDateTime.of(2023, 11, 16, 0, 0))
@@ -43,10 +42,10 @@ public class EventControllerTest {
 			.basePrice(10_000)
 			.maxPrice(100_000)
 			.location("Kim's House")
+			.free(true)
+			.offline(false)
+			.eventStatus(EventStatus.PUBLISHED)
 			.build();
-		event.setId(1);
-
-		Mockito.when(eventRepository.save(event)).thenReturn(event);
 
 		mockMvc.perform(post("/api/events")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -54,7 +53,9 @@ public class EventControllerTest {
 				.content(objectMapper.writeValueAsString(event)))
 			.andDo(print()) // show Result
 			.andExpect(status().isCreated()) // isCreated == 201
-			.andExpect(jsonPath("id").exists())
+			.andExpect(jsonPath("id").value(Matchers.not(100)))
+			.andExpect(jsonPath("free").value(Matchers.not(true)))
+			.andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
 		;
 	}
 }
