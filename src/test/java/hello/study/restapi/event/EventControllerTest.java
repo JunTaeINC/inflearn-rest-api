@@ -51,8 +51,8 @@ public class EventControllerTest {
 				.content(objectMapper.writeValueAsString(eventDto)))
 			.andDo(print()) // show Result
 			.andExpect(status().isCreated()) // isCreated == 201
-			.andExpect(jsonPath("id").value(Matchers.not(100)))
-			.andExpect(jsonPath("free").value(Matchers.not(true)))
+			.andExpect(jsonPath("free").value(false))
+			.andExpect(jsonPath("offline").value(true))
 			.andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
 		;
 	}
