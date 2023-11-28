@@ -7,7 +7,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.time.LocalDateTime;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,6 +53,9 @@ public class EventControllerTest {
 			.andExpect(jsonPath("free").value(false))
 			.andExpect(jsonPath("offline").value(true))
 			.andExpect(jsonPath("eventStatus").value(EventStatus.DRAFT.name()))
+			.andExpect(jsonPath("_links.self").exists())
+			.andExpect(jsonPath("_links.query-events").exists())
+			.andExpect(jsonPath("_links.update-event").exists())
 		;
 	}
 
