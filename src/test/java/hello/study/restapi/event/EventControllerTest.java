@@ -75,7 +75,8 @@ public class EventControllerTest {
 				links(
 					linkWithRel("self").description("link to self"),
 					linkWithRel("query-events").description("link to query-events"),
-					linkWithRel("update-event").description("link to update-event")
+					linkWithRel("update-event").description("link to update-event"),
+					linkWithRel("profile").description("link to profile")
 				),
 				requestHeaders(
 					headerWithName(HttpHeaders.ACCEPT).description("accept header"),
@@ -111,7 +112,11 @@ public class EventControllerTest {
 					fieldWithPath("limitOfEnrollment").description("limit of enrollment"),
 					fieldWithPath("free").description("it tells if this event is free or not"),
 					fieldWithPath("offline").description("it tells if this event is offline event or not"),
-					fieldWithPath("eventStatus").description("event status")
+					fieldWithPath("eventStatus").description("event status"),
+					fieldWithPath("_links.self.href").description("link to self"),
+					fieldWithPath("_links.query-events.href").description("link to query events"),
+					fieldWithPath("_links.update-event.href").description("link to update event"),
+					fieldWithPath("_links.profile.href").description("link to profile")
 				)
 			))
 		;
