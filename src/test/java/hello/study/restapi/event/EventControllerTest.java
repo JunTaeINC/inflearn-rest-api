@@ -214,12 +214,34 @@ public class EventControllerTest {
 		;
 	}
 
-	private void generateEvent(int index) {
+	@Test
+	@DisplayName("이벤트 하나 조회")
+	void getEvent() throws Exception {
+		Event event = generateEvent(99);
+
+		mockMvc.perform(get("/api/events/{id}", event.getId()))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("name").exists())
+			.andExpect(jsonPath("id").exists())
+			.andExpect(jsonPath("_links.self").exists())
+			.andExpect(jsonPath("_links.profile").exists())
+			.andDo(document("get-an-event"))
+		;
+	}
+
+	@Test
+	@DisplayName("없는 이벤트 조회시 404")
+	void getEvent_404() throws Exception {
+		mockMvc.perform(get("/api/event/1116"))
+			.andExpect(status().isNotFound());
+	}
+
+	private Event generateEvent(int index) {
 		Event event = Event.builder()
 			.name("event " + index)
 			.description("test event")
 			.build();
 
-		eventRepository.save(event);
+		return eventRepository.save(event);
 	}
 }
