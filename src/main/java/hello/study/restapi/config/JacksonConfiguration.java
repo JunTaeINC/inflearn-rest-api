@@ -2,9 +2,12 @@ package hello.study.restapi.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import hello.study.restapi.common.ErrorsSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.Errors;
 
 @Configuration
 public class JacksonConfiguration {
@@ -22,6 +25,10 @@ public class JacksonConfiguration {
 			이를 해결하기 위해서는 jackson-datatype-jsr310 모듈을 추가
 		*/
 		objectMapper.registerModule(new JavaTimeModule());
+
+		SimpleModule module = new SimpleModule();
+		module.addSerializer(Errors.class, new ErrorsSerializer());
+		objectMapper.registerModule(module);
 
 		return objectMapper;
 	}
