@@ -64,7 +64,7 @@ public class EventController {
 		return ResponseEntity.created(createUri).body(eventResource);
 	}
 
-	@GetMapping()
+	@GetMapping
 	public ResponseEntity queryEvents(Pageable pageable, PagedResourcesAssembler<Event> assembler) {
 		Page<Event> page = eventRepository.findAll(pageable);
 		var pagedModel = assembler.toModel(page, EventResource::new);

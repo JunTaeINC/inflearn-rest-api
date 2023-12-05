@@ -1,11 +1,13 @@
 package hello.study.restapi.event;
 
+import hello.study.restapi.member.Member;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,6 +48,8 @@ public class Event {
 	 */
 	@Enumerated(EnumType.STRING)
 	private EventStatus eventStatus = EventStatus.DRAFT;
+	@ManyToOne
+	private Member member;
 
 	public void update() {
 		free = basePrice == 0 && maxPrice == 0;
